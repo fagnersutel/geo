@@ -1,5 +1,5 @@
 ## required packages
-install.packages("mapview")
+#install.packages("mapview")
 library(mapview)
 library(sp)
 

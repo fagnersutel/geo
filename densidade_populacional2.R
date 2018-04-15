@@ -1,3 +1,7 @@
+library(ggplot2)
+library(OpenStreetMap)
+library(ggmap)
+
 nm = c("osm", "maptoolkit-topo",
        "waze", "mapquest", "mapquest-aerial",
        "bing", "stamen-toner", "stamen-terrain",
@@ -35,7 +39,7 @@ symbols(y = tmp$lon, x = tmp$lat, circles = tmp$pop, add = TRUE,
 
 
 
-library("ggmap")
+
 map <- get_map(location = c(lon[1], lat[2], lon[2], lat[1]),
                maptype = "roadmap", source = "google", zoom = 11)
 p <- ggmap(map) +
@@ -44,11 +48,6 @@ p <- ggmap(map) +
     theme_bw()
 print(p)
 
-
-
-library(ggplot2)
-library(OpenStreetMap)
-library(ggmap)
 
 
 gcodes = geocode(iconv("ufrgs", to = "UTF-8"))
