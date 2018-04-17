@@ -3,14 +3,15 @@ library(leafletR)
 library(rgdal) #for reading/writing geo files
 library(rgeos) #for simplification
 library(sp)
-
+setwd("~/R-files/geo/")
 # note that this file is somewhat big so it might take a couple
 # of minutes to download
 url<-"http://www2.census.gov/geo/tiger/TIGER2010DP1/County_2010Census_DP1.zip"
-downloaddir<-"~/OneDrive/Cursos/meusR/dados/"
-#destname<-"tiger.zip"
-#download.file(url, destname)
-#unzip(destname, exdir=downloaddir, junkpaths=TRUE)
+downloaddir<-"~/R-files/geo/dados/"
+list.files()
+destname<-"tiger.zip"
+download.file(url, destname)
+unzip(destname, exdir=downloaddir, junkpaths=TRUE)
 
 filename<-list.files(downloaddir, pattern=".shp", full.names=FALSE)
 filename
@@ -18,9 +19,12 @@ filename<-gsub(".shp", "", filename)
 
 # ----- Read in shapefile (NAD83 coordinate system)
 # ----- this is a fairly big shapefile and takes 1 minute to read
-setwd("~/OneDrive/Cursos/meusR/dados/")
+setwd("~/R-files/geo/dados/")
 list.files()
 dat<-readOGR(".", "County_2010Census_DP1") 
+
+#dat$INTPTLAT10 <- gsub('+55', '-55', dat$INTPTLAT10)
+#dat$INTPTLON10 <- gsub('-089', '-31', dat$INTPTLON10)
 
 # ----- Create a subset of New York counties
 subdat<-dat[substring(dat$GEOID10, 1, 2) == "36",]
@@ -46,8 +50,8 @@ subdat<-SpatialPolygonsDataFrame(subdat, data=subdat_data)
 leafdat<-paste(filename, ".geojson", sep="") 
 
 
-writeOGR(subdat, leafdat, layer="", driver="GeoJSON")
 
+writeOGR(subdat, leafdat, layer="", driver="GeoJSON")
 
 # ----- Create the cuts
 cuts<-round(quantile(subdat$Population, probs = seq(0, 1, 0.20), na.rm = FALSE), 0)
