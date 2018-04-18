@@ -1,3 +1,4 @@
+#https://cran.r-project.org/web/packages/contoureR/contoureR.pdf
 library(contoureR)
 library(ggplot2)
 x_coord <- c(16.48438,  24.74609, 17.49512,  22.59277, 16.48438)
@@ -32,7 +33,7 @@ ch
 
 
 
-
+library(sp)
 
 Sr1 = Polygon(cbind(c(2,4,4,1,2),c(2,3,5,4,2)))
 Sr2 = Polygon(cbind(c(5,4,2,5),c(2,3,2,2)))
@@ -83,7 +84,7 @@ y_coorda <- c(59.736328125, 55.0341796875, 55.1220703125, 61.142578125, 59.73632
 
 xym <- cbind(x_coord, y_coord)
 xym
-library(sp)
+
 p = Polygon(xym)
 ps = Polygons(list(p),1)
 sps = SpatialPolygons(list(ps))
@@ -115,17 +116,101 @@ area
 # Example of the provision of non-regular data
 library(contoureR)
 library(ggplot2)
-a = -2; b = +2; n = 1
-x = runif(n*n,a,b)
-y = runif(n*n,a,b)
+a  = -2; b = +2; n  = 150
+x  = runif(n*n,a,b)
+y  = runif(n*n,a,b)
 df = data.frame(x,y)
-df$z = with(df,-x*y*exp(-x^2-y^2))
-df.sub = subset(df,x^2 + y^2 < 2)
-df.cnt = getContourLines(df)
-ggplot(data=df.cnt,aes(x,y,group=Group,colour=z)) + geom_path() + theme_bw()
-
-
-df$z = with(da,-x*y*exp(-x^2-y^2))
+df$z   = with(df,-x*y*exp(-x^2-y^2))
 df.sub = subset(df,x^2 + y^2 < 2)
 df.cnt = getContourLines(df.sub,nlevels=20)
 ggplot(data=df.cnt,aes(x,y,group=Group,colour=z)) + geom_path() + theme_bw()
+
+
+df$z = with(df,-x*y*exp(-x^2-y^2))
+df.sub = subset(df,x^2 + y^2 < 2)
+df.cnt = getContourLines(df.sub,nlevels=3)
+ggplot(data=df.cnt,aes(x,y,group=Group,colour=z)) + geom_path() + theme_bw()
+
+
+n = 100
+x = runif(n)
+y = runif(n)
+df = expand.grid(x,y);
+colnames(df) = c("x","y")
+df$z = df$x^2 + df$y^2
+dm = getDelaunayMesh(df$x,df$y)
+res = contourWalker(dm,as.matrix(df),levels=pretty(df$z,n=20))
+res = data.frame(res); colnames(res) = c('LID','GID','PID','x','y','z')
+res$Group = interaction(res$LID,res$GID)
+library(ggplot2)
+ggplot(res,aes(x,y,group=Group,colour=z)) + geom_path()
+
+
+
+x = runif(100)
+y = runif(100)
+ch = convexHullAM_Indexes(x,y,includeColinear=FALSE,zeroBased = FALSE)
+ggplot(data.frame(x,y),aes(x,y)) +
+  geom_point() +
+  geom_path(data=data.frame(x,y)[ch,],colour="red")
+
+
+
+
+data(volcano)
+x = 1:nrow(volcano)
+y = 1:ncol(volcano)
+z = expand.grid(x=x,y=y); z$z = apply(z,1,function(xx){ volcano[ xx[1],xx[2] ]} )
+df = getContourLines(z)
+ggplot(df,aes(x,y,group=Group,colour=z)) + geom_path()
+# Contour Lines for a Function
+library(ggplot2)
+a = -2; b = 2; n = 75
+x = y = seq(a,b,by=diff(c(a,b))/(n+1))
+df = expand.grid(x=x,y=y)
+df$z = with(df,-x*y*exp(-x^2-y^2))
+df.cnt = getContourLines(df)
+ggplot(data=df.cnt,aes(x,y,group=Group,colour=z)) + geom_path()
+
+
+
+set.seed(1)
+x = runif(100)
+y = runif(100)
+ch = getConvexHull(x,y)
+#To demonstrate, Lets view the hull
+library(ggplot2)
+df = data.frame(x,y)
+ggplot(data=df,aes(x,y)) +
+  geom_path(data=df[ch,]) +
+  geom_point()
+
+par(mfrow=c(2,2))
+
+set.seed(1)
+x = runif(100)
+y = runif(100)
+dm = getDelaunayMesh(x,y)
+#To demonstrate, Lets view the mesh
+library(ggplot2)
+library(reshape)
+df = as.data.frame(dm); df$id = 1:nrow(df); df = melt(df,id="id")
+df = cbind(df,data.frame(x,y)[df$value,])
+ggplot(data=df,aes(x,y,group=id)) +
+  geom_polygon(aes(fill=id),color="gray")
+
+
+
+
+set.seed(1)
+x = runif(100)
+y = runif(100)
+op = orderPoints(x,y)
+#To demonstrate, Lets view the points in order
+library(ggplot2)
+df = data.frame(x,y)
+df = df[op,];
+df$id = 1:nrow(df)
+ggplot(data=df,aes(x,y,colour=id)) +
+  geom_path() + geom_point() +
+  scale_colour_gradient(low="green",high="red")
