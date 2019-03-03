@@ -3,7 +3,7 @@ library(leafletR)
 library(rgdal) #for reading/writing geo files
 library(rgeos) #for simplification
 library(sp)
-setwd("~/R-files/geo/")
+setwd("~/OneDrive/R-files/geo/")
 # note that this file is somewhat big so it might take a couple
 # of minutes to download
 url<-"http://www2.census.gov/geo/tiger/TIGER2010DP1/County_2010Census_DP1.zip"
@@ -19,7 +19,7 @@ filename<-gsub(".shp", "", filename)
 
 # ----- Read in shapefile (NAD83 coordinate system)
 # ----- this is a fairly big shapefile and takes 1 minute to read
-setwd("~/R-files/geo/dados/")
+setwd("~/OneDrive/R-files/geo/dados/")
 list.files()
 dat<-readOGR(".", "County_2010Census_DP1") 
 

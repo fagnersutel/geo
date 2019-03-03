@@ -1,13 +1,17 @@
 #https://cran.r-project.org/web/packages/contoureR/contoureR.pdf
 library(contoureR)
 library(ggplot2)
-x_coord <- c(16.48438,  24.74609, 17.49512,  22.59277, 16.48438)
-y_coord <- c(59.736328125, 55.0341796875, 55.1220703125, 61.142578125, 59.736328125)
 set.seed(1)
 x = runif(100)
 y = runif(100)
-xy <- cbind(x, y)
+
+x_coord <- c(16.48438,  24.74609, 17.49512,  22.59277, 16.48438)
+x_coord
+y_coord <- c(59.736328125, 55.0341796875, 55.1220703125, 61.142578125, 59.736328125)
+xy <- cbind(x_coord, y_coord)
 xy <- as.data.frame(xy)
+xy
+class(xy)
 ch1 = convexHullAM_Indexes(xy$x,xy$y, includeColinear=FALSE,zeroBased = FALSE)
 
 ggplot(data.frame(x,y),aes(x,y)) +

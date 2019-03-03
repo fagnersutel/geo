@@ -9,7 +9,7 @@ library (raster)   # for metadata/attributes- vectors or rasters
 
 
 ## ----read-csv------------------------------------------------------------
-
+setwd('~/OneDrive/r-files/geo/shp-csv/')
 # Read the .csv file
 plot.locations_HARV <- 
   read.csv("NEON-DS-Site-Layout-Files/HARV/HARV_PlotLocations.csv",

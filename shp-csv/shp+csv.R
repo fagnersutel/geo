@@ -4,7 +4,7 @@ library(rgdal)  # for vector work; sp package should always load with rgdal.
 library (raster)   # for metadata/attributes- vectors or rasters
 
 # set working directory to data folder
-setwd("~/OneDrive/Cursos/meusR/shp-csv/")
+setwd("~/OneDrive/r-files/geo/shp-csv/")
 # Read the .csv file
 plot.locations_HARV <- 
     read.csv("NEON-DS-Site-Layout-Files/HARV/HARV_PlotLocations.csv", stringsAsFactors = FALSE)
@@ -174,3 +174,4 @@ legend("bottomright",
 # write a shapefile
 writeOGR(plot.locationsSp_HARV, getwd(),
          "PlotLocations_HARV", driver="ESRI Shapefile")
+
