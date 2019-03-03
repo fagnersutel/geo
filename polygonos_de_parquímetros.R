@@ -164,6 +164,7 @@ rgdal::writeOGR(obj = spDF,
                 driver = "GeoJSON",
                 overwrite_layer = TRUE)
 
+
 nycounties <- geojsonio::geojson_read("myParq.json",
                                       what = "sp")
 nycounties
@@ -173,13 +174,32 @@ library(leaflet)
 pal <- colorNumeric(c("red", "green", "blue", "pink", "brown"), c(clusters_encontrados))
 leaflet(nycounties) %>%
   addTiles() %>%
-  addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.4, fillColor = ~pal(box_id), popup=nycounties)
+  addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.4, fillColor = ~pal(clusters_encontrados), popup=nycounties)
 
 
 library(mapview)
 library(geojsonio)
 dat <- geojson_read("myParq.json", what = "sp")
 mapview(dat)
+
 leaflet() %>% 
   addTiles() %>%
   addPolygons(data = dat, popup = popupTable(dat))
+
+pal <- colorFactor(
+  palette = 'Dark2',
+  domain = dados$cluster
+)
+
+pal2 <- colorFactor(
+  palette = 'Blues',
+  domain = dat$box_id
+)
+leaflet(dados) %>%
+  addTiles(group="OSM") %>% 
+  addCircles(group="Alvaras", ~V1, ~V2, weight = 0.1, radius=30, color=~pal(cluster),
+             stroke = TRUE, fillOpacity = 0.8) %>% 
+  addPolygons(group="AAE", data = dat, fillOpacity = 0.8) %>% 
+  addLegend(group="Legenda", "topright", colors= "", labels=paste(summary(apres)[1], "Clusters"), title="Alvaras em Porto Alegre") %>% 
+  addLayersControl(overlayGroups = c("Alvaras", "AAE", "Legenda"),
+                   options = layersControlOptions(collapsed = FALSE))
