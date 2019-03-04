@@ -24,3 +24,10 @@ proj4string(meuse) <- CRS("+init=epsg:28992")
 
 mapview(meuse, zcol = c("lead", "landuse", "elev"), 
         layer.name = c("Concentration of lead", "Lanuse type", "elevacao"))
+
+head(parquimetros)
+coordinates(parquimetros) <- ~V1+V2
+proj4string(parquimetros) <- CRS("+init=epsg:4326")
+names(parquimetros)
+mapview(parquimetros, zcol = c("V5", "V3", "V7"), 
+        layer.name = c("Bairro", "Vagas", "Situacao"))

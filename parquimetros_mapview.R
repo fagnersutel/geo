@@ -6,44 +6,24 @@ setwd("~/OneDrive/r-files/AffinityPropagationClustering/")
 getwd()
 load(file = "apres2.rda")
 load(file = "x2-13000.rda")
-
 head(x2)
 dim(x2)
 summary(apres)
-
 plot(apres, x2)
-
 predict.apcluster <- function(s, exemplars, newdata)
 {
   simMat <- s(rbind(exemplars, newdata), sel=(1:nrow(newdata)) + nrow(exemplars))[1:nrow(exemplars), ]
   unname(apply(simMat, 2, which.max))
 }
-
-
 resultado <- list()
-
-
 parq = read.csv('tipoSinal.csv', header = FALSE, sep = ",")
 head(parq)
 dim(parq)
 parq = parq[parq$V1 < 1006 , ]
 parq$V5 = as.integer(parq$V5)
-parq$V7 = NULL
-parq$V8 = NULL
-parq$V9 = NULL
-parq$V10 = NULL
-parq$V11 = NULL
-parq$V12 = NULL
-parq$V13 = NULL
-parq$V14 = NULL
-parq$V15 = NULL
-parq$V16 = NULL
-parq$V17 = NULL
-parq$V18 = NULL
-parq$V19 = NULL
-parq$V20 = NULL
 parq$V1 = NULL
-
+parq$V7 = NULL; parq$V8 = NULL; parq$V9 = NULL; parq$V10 = NULL; parq$V11 = NULL; parq$V12 = NULL; parq$V13 = NULL
+parq$V14 = NULL; parq$V15 = NULL; parq$V16 = NULL; parq$V17 = NULL; parq$V18 = NULL; parq$V19 = NULL; parq$V20 = NULL
 
 parquiativo = parq[parq$V23 == "Parquimetro Ativo", ]
 parq$V23 = as.character(parq$V23)
@@ -52,29 +32,23 @@ head(parquiativo)
 parquiretirado = parq[parq$V23 == "Parquimetro Retirado", ]
 dim(parquiretirado)
 head(parq)
-
 parquimetros = rbind(parquiativo, parquiretirado)
 dim(parquimetros)
 head(parquimetros)
-
 areas = unique(parquimetros$V21)
 print(areas)
-
 parquimetros$V3 <- as.numeric(as.character(parquimetros$V3))
 parquimetros$V4 <- as.numeric(as.character(parquimetros$V4))
 parquimetros <- parquimetros[parquimetros$V3 < 0, ]
 parquimetros <- subset(parquimetros, !is.na(V3))
 head(parquimetros)
-
 dim(parquimetros)
-
 parquimetros$cluster = 0
 head(parquimetros)
 parquimetros = parquimetros[1:length(parquimetros$V3),]
 head(parquimetros)
 names(parquimetros) = c("V0", "V1", "V2", "V3", "V4", "V5", "V6", "V7")
 head(parquimetros)
-
 aa= length(parquimetros$V3)/10
 aa = aa+1
 aa
@@ -87,6 +61,7 @@ head(parquimetros)
 dados = parquimetros
 head(dados)
 tail(dados)
+
 
 meucluster <- function(cluster) {
   dadosc = dados[dados$cluster == cluster,]
@@ -116,6 +91,8 @@ leaflet(parquimetros) %>%
   addLegend(group="Legenda", "topright", colors= "", labels=paste("Classificados em meio a ", summary(apres)[1], "Clusters"), title="Parquímetros em Porto Alegre") %>% 
   addLayersControl(overlayGroups = c("Mapa", "Parquimetros", "Legenda"),
                    options = layersControlOptions(collapsed = TRUE))
+
+
 
 
 parquimetros
@@ -209,11 +186,12 @@ leaflet(dados) %>%
                    options = layersControlOptions(collapsed = FALSE))
 
 
-library(sp)
-require(MASS)
-topo
-library(geoR)
-topogeo <- as.geodata(topo)
-names(topogeo)
-topogeo
 
+
+head(parquimetros)
+coordinates(parquimetros) <- ~V1+V2
+proj4string(parquimetros) <- CRS("+init=epsg:4326")
+names(parquimetros)
+mapviewOptions(default = TRUE)
+mapview(parquimetros, zcol = c("V5", "V3", "V7", "cluster"), 
+        layer.name = c("Bairro", "Vagas", "Situacao", "Cluster"))

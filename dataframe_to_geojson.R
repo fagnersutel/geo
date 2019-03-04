@@ -52,6 +52,9 @@ rgdal::writeOGR(obj = spDF,
                 overwrite_layer = TRUE)
 
 
+
+
+
 dados = parquimetros[parquimetros$"cluster" == 113,  ]
 dados
 names(dados) = c("log", "lat", "lon", "v3", "v4", "bairro", "id", "v7", "group", "box_id")
