@@ -177,6 +177,7 @@ leaflet(nycounties) %>%
   addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.4, fillColor = ~pal(clusters_encontrados), popup=nycounties)
 
 
+setwd("~/OneDrive/r-files/AffinityPropagationClustering/")
 library(mapview)
 library(geojsonio)
 dat <- geojson_read("myParq.json", what = "sp")
@@ -203,3 +204,12 @@ leaflet(dados) %>%
   addLegend(group="Legenda", "topright", colors= "", labels=paste(summary(apres)[1], "Clusters"), title="Alvaras em Porto Alegre") %>% 
   addLayersControl(overlayGroups = c("Alvaras", "AAE", "Legenda"),
                    options = layersControlOptions(collapsed = FALSE))
+
+
+
+require(MASS)
+topo
+topogeo <- as.geodata(topo)
+names(topogeo)
+topogeo
+
