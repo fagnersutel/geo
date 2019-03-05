@@ -4,4 +4,5 @@ data <- data.frame(lng, lat)
 library(geosphere)
 area <- geosphere::areaPolygon(x = data)
 area
+area / 1000
 plot(data, type="l")
