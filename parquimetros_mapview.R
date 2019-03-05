@@ -195,3 +195,5 @@ names(parquimetros)
 mapviewOptions(default = TRUE)
 mapview(parquimetros, zcol = c("V5", "V3", "V7", "cluster"), 
         layer.name = c("Bairro", "Vagas", "Situacao", "Cluster"))
+
+

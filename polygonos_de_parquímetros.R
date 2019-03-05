@@ -2,7 +2,7 @@ gctorture (FALSE)
 rm(list = ls(all.names = TRUE))
 library(leaflet.extras)
 library(apcluster)
-setwd("~/OneDrive/r-files/AffinityPropagationClustering/")
+setwd("/Users/fagne/OneDrive/r-files/AffinityPropagationClustering/")
 getwd()
 load(file = "apres2.rda")
 load(file = "x2-13000.rda")
@@ -133,14 +133,15 @@ for (i in clusters_encontrados){
   
 }
 poly
-
+dim(poly)
 dados = poly
 names(dados) = c("log", "lat", "lon", "v3", "v4", "group", "id1", "v7", "id", "box_id")
 dados$id = (dados$box_id * 11)
-
-
+head(dados)
+library(sp)
 coordinates(dados)=c("lat","lon")
 df = dados
+df
 data <- data.frame(box_id=unique(df$box_id),row.names=unique(df$id))
 data
 
@@ -172,6 +173,7 @@ nycounties <- geojsonio::geojson_read("myParq.json",
                                       what = "sp")
 nycounties
 
+mapview(nycounties)
 library(leaflet)
 #pal <- colorNumeric("RdYlBu", NULL)
 pal <- colorNumeric('Spectral', c(clusters_encontrados))

@@ -1,4 +1,5 @@
 #https://cran.r-project.org/web/packages/contoureR/contoureR.pdf
+
 library(contoureR)
 library(ggplot2)
 set.seed(1)
@@ -11,10 +12,14 @@ y_coord <- c(59.736328125, 55.0341796875, 55.1220703125, 61.142578125, 59.736328
 xy <- cbind(x_coord, y_coord)
 xy <- as.data.frame(xy)
 xy
+xy$aa = "aa"
+xy$bb = "bb"
+xy$cc = "cc"
+xy
 class(xy)
 ch1 = convexHullAM_Indexes(xy$x,xy$y, includeColinear=FALSE,zeroBased = FALSE)
-
-ggplot(data.frame(x,y),aes(x,y)) +
+ch1
+ggplot(data.frame(xy$x_coord,xy$y_coord),aes(xy$x_coord,xy$y_coord)) +
   geom_point() +
   geom_path(data=data.frame(x,y)[ch1,],colour="red")
 ch1
